@@ -21,7 +21,7 @@ module.exports = {
   networks: {
     rinkeby: {
       url: "https://eth-rinkeby.alchemyapi.io/v2/hlCl5138sPkKYiSNNuVa1FCPqwY2p2bB", //API url from alchemy dashboard
-      accounts: ["e65e666jh9e3da6dd451b8a6178ed8b499de8f2d1d1fd24aaf91d1eac2a327f3"] //remove the key. it's the official one
+      accounts: ["e65e666589e3da6dd451b8a6178ed8b499de8f2d1d1fd24aaf91d1eac2a327f3"] //remove the key. it's the official one
     },
   },
 };
