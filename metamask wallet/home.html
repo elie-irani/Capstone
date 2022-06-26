@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #profileIcon{
+            width: 600px;
+            height: 600px;
+            border-radius: 60%;
+            background-position: center center;
+            background-size: cover;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button class="enableEthereumButton">Enable Ethereum</button>
+    <h2>Account: <span class="showAccount"></span></h2>
+
+    <!-- Allows users to input wallet addresses to get the assets --> 
+    <label for="wallet_address">Enter wallet address:</label>
+    <input type="text" name="wallet_address" id="wallet_address" required>
+    <button onclick="getAddress()">Submit</button>
+
+
+    <div class="hexagon" id="profileIcon" style="background-image: url('https://lh3.googleusercontent.com/7bRocEaoBrWYBX3vThkHj4kAV3b3mKG-Kem85xeT-D8oHpvQ19kcoiBd9mIFeNU0GrwZGvj6Oc5NAEGBSsGlrww');"></div>
+    
+
+    <script>
+        //metamask wallet connection
+        const ethereumButton = document.querySelector('.enableEthereumButton'); //connect button html   
+        const showAccount = document.querySelector('.showAccount'); // account h5 html
+
+        ethereumButton.addEventListener('click', () => {
+        getAccount();
+        });
+
+        async function getAccount() {
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            const account = accounts[0];
+            showAccount.innerHTML = account;
+        }
+
+        function getAssets(wallet_address){
+            console.log("assets");
+            const options = {method: 'GET', headers: {Accept: 'application/json'}};
+
+            fetch('https://api.opensea.io/api/v1/assets?owner='+ wallet_address +'&order_direction=desc&limit=20&include_orders=false', options)
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.error(err));
+        }
+        
+        function getAddress(){
+            //takes from input field and redirects to getAssets()
+            const address = document.getElementById('wallet_address').value;
+            console.log("wallet address is:" + address);
+            getAssets(address);
+            //getAsset();
+        }
+
+        function getAsset(){
+            //retrieve asset
+            console.log("asset");
+            const options = {method: 'GET'};
+
+            fetch('https://api.opensea.io/api/v1/asset/' + '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb' + '/1/?include_orders=false', options)
+            .then(response => response.json())
+            .then(response => console.log(response))
+            .catch(err => console.error(err));
+            
+            //document.getElementById('nft_image').innerHTML = 
+        }
+        
+    </script>
+</body>
+</html>
