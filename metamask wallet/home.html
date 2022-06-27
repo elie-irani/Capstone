@@ -4,14 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>NFT</title>
     <style>
         #profileIcon{
-            width: 600px;
-            height: 600px;
+            width: 200px;
+            height: 200px;
             border-radius: 60%;
             background-position: center center;
             background-size: cover;
+            cursor: pointer;
+        }
+        #results{
+            border: 1px solid gray;
+        }
+        .nft_display:hover{
             cursor: pointer;
         }
     </style>
@@ -25,9 +31,10 @@
     <input type="text" name="wallet_address" id="wallet_address" required>
     <button onclick="getAddress()">Submit</button>
 
+    <div id="profileIcon" style="background-image: url('/test.jpg');"></div>
 
-    <div class="hexagon" id="profileIcon" style="background-image: url('https://lh3.googleusercontent.com/7bRocEaoBrWYBX3vThkHj4kAV3b3mKG-Kem85xeT-D8oHpvQ19kcoiBd9mIFeNU0GrwZGvj6Oc5NAEGBSsGlrww');"></div>
-    
+    <div class="results">
+    </div>    
 
     <script>
         //metamask wallet connection
@@ -39,27 +46,40 @@
         });
 
         async function getAccount() {
+            //gets the address of the connected wallet
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             const account = accounts[0];
             showAccount.innerHTML = account;
         }
 
         function getAssets(wallet_address){
-            console.log("assets");
+            //retrieves all assets of the wallet_address
             const options = {method: 'GET', headers: {Accept: 'application/json'}};
 
             fetch('https://api.opensea.io/api/v1/assets?owner='+ wallet_address +'&order_direction=desc&limit=20&include_orders=false', options)
             .then(response => response.json())
-            .then(response => console.log(response))
+            .then(response => listAssets(response))
             .catch(err => console.error(err));
+
         }
-        
+
+        function listAssets(response){
+            // displays all nfts retrieved from API
+            const nfts = response.assets;
+
+            nfts.forEach(nft => {
+                const element = '<img src="' + nft.image_url + '" class="nft_display" onClick="setProfile(this.src)">'
+                document.querySelector('.results').innerHTML += element;
+            });
+
+        }
+
         function getAddress(){
             //takes from input field and redirects to getAssets()
             const address = document.getElementById('wallet_address').value;
             console.log("wallet address is:" + address);
             getAssets(address);
-            //getAsset();
+
         }
 
         function getAsset(){
@@ -73,6 +93,10 @@
             .catch(err => console.error(err));
             
             //document.getElementById('nft_image').innerHTML = 
+        }
+
+        function setProfile(src){
+            document.getElementById("profileIcon").style.backgroundImage = "url('" + src + "')";
         }
         
     </script>
