@@ -23,13 +23,14 @@
     </style>
 </head>
 <body>
-    <button class="enableEthereumButton">Enable Ethereum</button>
+    <!-- Connect wallet button -->
+    <button class="enableEthereumButton" onclick="connectWallet()">Connect wallet</button>
     <h2>Account: <span class="showAccount"></span></h2>
 
     <!-- Allows users to input wallet addresses to get the assets --> 
     <label for="wallet_address">Enter wallet address:</label>
     <input type="text" name="wallet_address" id="wallet_address" required>
-    <button onclick="getAddress()">Submit</button>
+    <button >NFT profile</button>
 
     <div id="profileIcon" style="background-image: url('/test.jpg');"></div>
 
@@ -37,20 +38,20 @@
     </div>    
 
     <script>
-        //metamask wallet connection
-        const ethereumButton = document.querySelector('.enableEthereumButton'); //connect button html   
-        const showAccount = document.querySelector('.showAccount'); // account h5 html
 
-        ethereumButton.addEventListener('click', () => {
-        getAccount();
-        });
+        async function connectWallet(){
+            //checks if browser has metamask
+            if (typeof window.ethereum !== 'undefined') {
+                    ethereum.request({ method: 'eth_requestAccounts' });
+                    const address = await getAddress();
 
-        async function getAccount() {
-            //gets the address of the connected wallet
-            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-            const account = accounts[0];
-            showAccount.innerHTML = account;
+                    getAssets(address);
+                }
+                else{
+                    console.log("wallet not connected");
+                }
         }
+
 
         function getAssets(wallet_address){
             //retrieves all assets of the wallet_address
@@ -74,25 +75,12 @@
 
         }
 
-        function getAddress(){
-            //takes from input field and redirects to getAssets()
-            const address = document.getElementById('wallet_address').value;
-            console.log("wallet address is:" + address);
-            getAssets(address);
-
-        }
-
-        function getAsset(){
-            //retrieve asset
-            console.log("asset");
-            const options = {method: 'GET'};
-
-            fetch('https://api.opensea.io/api/v1/asset/' + '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb' + '/1/?include_orders=false', options)
-            .then(response => response.json())
-            .then(response => console.log(response))
-            .catch(err => console.error(err));
-            
-            //document.getElementById('nft_image').innerHTML = 
+        async function getAddress(){
+            const showAccount = document.querySelector('.showAccount');
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            const account = accounts[0];
+            showAccount.innerHTML = account;
+            return account;
         }
 
         function setProfile(src){
