@@ -47,7 +47,10 @@
         <!-- Profile icon -->
         <div id="profileIcon" style="background-image: url('test.jpg');"></div>
         <!-- Fetch results will appear here -->
-        <div class="results"></div>    
+        <fieldset>
+            <legend>My NFTs</legend>
+            <div class="results"></div>
+        </fieldset>
     </div>
 
     <div id="lookup_address">
@@ -56,9 +59,13 @@
         <input type="text" name="wallet_address" id="wallet_address" required>
         <button onclick="lookUp()">Show NFTs</button>
 
-        <div class="lookup_results"></div>
+        
+        <fieldset>
+            <legend>NFTs</legend>
+            <div class="lookup_results"></div>
+        </fieldset>
     </div>
-    
+
     <script>
         
         async function connectWallet(){
