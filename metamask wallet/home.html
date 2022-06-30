@@ -38,20 +38,21 @@
     </div>    
 
     <script>
-
+        
         async function connectWallet(){
             //checks if browser has metamask
-            if (typeof window.ethereum !== 'undefined') {
-                    ethereum.request({ method: 'eth_requestAccounts' });
-                    const address = await getAddress();
+            if (ethereum.isMetaMask) {
+                console.log("installed");
+                const address = await getAddress();
+                console.log("Wallet address: " + address);
+                console.log("Getting assets");
+                getAssets('address');
 
-                    getAssets(address);
-                }
-                else{
-                    console.log("wallet not connected");
-                }
+            }
+            else{
+                console.log("No metamask detected.");
+            }
         }
-
 
         function getAssets(wallet_address){
             //retrieves all assets of the wallet_address
@@ -66,18 +67,23 @@
 
         function listAssets(response){
             // displays all nfts retrieved from API
-            const nfts = response.assets;
+            if(response.assets.length == 0){
+                console.log("Empty addresss");
+            }
+            else{
+                const nfts = response.assets;
 
-            nfts.forEach(nft => {
-                const element = '<img src="' + nft.image_url + '" class="nft_display" onClick="setProfile(this.src)">'
-                document.querySelector('.results').innerHTML += element;
-            });
-
+                nfts.forEach(nft => {
+                    const element = '<img src="' + nft.image_url + '" class="nft_display" onClick="setProfile(this.src)">'
+                    document.querySelector('.results').innerHTML += element;
+                });
+            }
         }
 
         async function getAddress(){
+            //Retreive wallet address
             const showAccount = document.querySelector('.showAccount');
-            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            const accounts = await ethereum.request({ method: 'eth_requestAccounts' });//Requests connection
             const account = accounts[0];
             showAccount.innerHTML = account;
             return account;
