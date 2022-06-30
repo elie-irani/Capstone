@@ -5,7 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NFT</title>
+</head>
+<body>
     <style>
+        body{
+            display: flex;
+            flex-direction: row;
+        }
+        #my_nfts{
+            width: 50vw;
+            border-right: 1px solid pink;
+            display: flex;
+            flex-direction: column;
+        }
         #profileIcon{
             width: 200px;
             height: 200px;
@@ -20,23 +32,33 @@
         .nft_display:hover{
             cursor: pointer;
         }
+        #lookup_address{
+            width: 50vw;
+            border-left: 1px solid pink;
+            display: flex;
+            flex-direction: column;
+        }
+
     </style>
-</head>
-<body>
-    <!-- Connect wallet button -->
-    <button class="enableEthereumButton" onclick="connectWallet()">Connect wallet</button>
-    <h2>Account: <span class="showAccount"></span></h2>
 
-    <!-- Allows users to input wallet addresses to get the assets --> 
-    <label for="wallet_address">Enter wallet address:</label>
-    <input type="text" name="wallet_address" id="wallet_address" required>
-    <button >NFT profile</button>
+    <div id="my_nfts">
+        <!-- Connect wallet button -->
+        <button class="enableEthereumButton" onclick="connectWallet()">Connect wallet</button>
+        <!-- Profile icon -->
+        <div id="profileIcon" style="background-image: url('test.jpg');"></div>
+        <!-- Fetch results will appear here -->
+        <div class="results"></div>    
+    </div>
 
-    <div id="profileIcon" style="background-image: url('test.jpg');"></div>
+    <div id="lookup_address">
+        <!-- Allows users to input wallet addresses to get the assets --> 
+        <label for="wallet_address">Enter wallet address:</label>
+        <input type="text" name="wallet_address" id="wallet_address" required>
+        <button onclick="lookUp()">Show NFTs</button>
 
-    <div class="results">
-    </div>    
-
+        <div class="lookup_results"></div>
+    </div>
+    
     <script>
         
         async function connectWallet(){
@@ -92,7 +114,36 @@
         function setProfile(src){
             document.getElementById("profileIcon").style.backgroundImage = "url('" + src + "')";
         }
-        
+
+        function lookUp(){
+            const address = document.getElementById("wallet_address").value;
+            console.log(address);
+
+
+            //retrieves all assets of the wallet_address
+            const options = {method: 'GET', headers: {Accept: 'application/json'}};
+
+            fetch('https://api.opensea.io/api/v1/assets?owner='+ address +'&order_direction=desc&limit=20&include_orders=false', options)
+            .then(response => response.json())
+            .then(response => displayAssets(response))
+            .catch(err => console.error(err));
+        }
+
+        function displayAssets(response){
+                // displays all nfts retrieved from API
+                console.log("inside");
+                if(response.assets.length == 0){
+                    console.log("Empty addresss");
+                }
+                else{
+                    const nfts = response.assets;
+
+                    nfts.forEach(nft => {
+                        const element = '<img src="' + nft.image_url + '">'
+                        document.querySelector('.lookup_results').innerHTML += element;
+                    });
+                }
+        }
     </script>
 </body>
 </html>
