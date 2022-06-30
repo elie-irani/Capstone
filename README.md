@@ -17,7 +17,7 @@ Web3 is just a term to represent an era in the web industry.
     - Web2, 2004-present, websites oriented towards user interactions (social media for example).
     - Web3 is still new, we are currently moving towards Web3. It's basically an era where websites and mobile apps use Dapps.
 
-                                                                          Credit: https://www.geeksforgeeks.org/web-1-0-web-2-0-and-web-3-0-with-their-difference/
+                                                                Credit: https://www.geeksforgeeks.org/web-1-0-web-2-0-and-web-3-0-with-their-difference/
 
 Now that i mentioned Dapps, What is it? Some might confuse Web3 with Dapps (Decentralized applications), they are realated but not the same. Web3, as i said, is just a term. Web3 uses Dapps. 
 Dapps is where all the fun work happens. It is basically the technical part of Web3. Think of it as client side program.
